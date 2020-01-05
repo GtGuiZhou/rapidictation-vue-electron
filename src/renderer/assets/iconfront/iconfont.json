@@ -1,0 +1,23 @@
+{
+  "id": "1566172",
+  "name": "SuperCrud",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2688722",
+      "name": "抱歉",
+      "font_class": "baoqian",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "4548016",
+      "name": "404",
+      "font_class": "icon-test",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    }
+  ]
+}
