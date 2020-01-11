@@ -10,28 +10,20 @@
                 :visible.sync="loggingActive"
                 width="700px"
         >
-            <div style="display: flex;justify-content: space-between;padding: 100px">
-                <img src="../assets/person.png" />
+
                 <div style="text-align: center">
-                    <div style="position: relative;left: -40px">
-                        <h2>疯狂听抄</h2>
-                        <h3>Crazy Transcription</h3>
-                    </div>
-                    <div style="display: flex">
-                        <el-input style="width: 300px" v-model="active_code" placeholder="请输入您的激活码"></el-input>
+                    <img src="../assets/logo.png" />
+                    <h3>学好英语，从听懂单词开始！</h3>
+
+                        <el-input style="width: 300px" v-model="active_code" placeholder="输入激活码"></el-input>
                         &nbsp;&nbsp;&nbsp;
                         <el-button type="primary" @click="active">激 活</el-button>
-                    </div>
+                    <br>
                     <br>
                     <div style="position: relative;left: -40px">
                         <a href="###" style="color: #409EFF" @click="setClipContent">粘贴无效？点我试试</a>
                     </div>
                 </div>
-            </div>
-
-            <div slot="footer" class="dialog-footer">
-
-            </div>
         </el-dialog>
     </div>
 </template>
@@ -39,6 +31,7 @@
 <script>
     import {machineId, machineIdSync} from 'node-machine-id';
     const { clipboard } = require('electron')
+    import '../assets/iconfont/iconfont.css'
     import Vue from 'vue'
     import ElementUI from 'element-ui';
     import 'element-ui/lib/theme-chalk/index.css';

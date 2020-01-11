@@ -168,7 +168,7 @@
                     insertUrl: '',
                     editUrl: '',
                     deleteUrl: '',
-                    actionWidth: '180',
+                    actionWidth: '200',
                     rowKey: '',
                     defaultExpandAll: false
                 }

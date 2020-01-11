@@ -115,6 +115,7 @@
                 this.words.splice(index,1)
             },
             async insertWord(){
+                this.inputValue = this.inputValue.replace(/(^\s*)|(\s*$)/g, "")
                 if (!this.inputValue || !/[a-z]+$/i.test(this.inputValue)){
                     this.$notify.error('格式不正确')
                     return

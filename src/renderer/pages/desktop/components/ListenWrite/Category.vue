@@ -4,8 +4,9 @@
             <div class="files">
                 <div v-for="(level,index) in category.children" :key="index" @click="openLevel(level)">
                     <el-tooltip class="item" effect="dark" :content="level.name" placement="bottom-end">
-                        <el-card :class="read(level)?'readborder':'unreadborder'">
-                            <i class="el-icon-video-play" style="font-size: 32px"/>
+                        <el-card :class="read(level)?'readborder':'unreadborder'" class="all-center">
+                            <i class="iconfont icon-qizi-copy" style="font-size: 32px"/>
+                            <br>
                             <br>
                             <label style="white-space: nowrap;">{{level.name.substr(0,8)}}</label>
                         </el-card>
@@ -74,6 +75,6 @@
     }
 
     .readborder {
-        color: #409EFF;
+        color: #67C23A;
     }
 </style>

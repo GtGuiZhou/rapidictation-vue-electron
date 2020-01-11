@@ -54,7 +54,7 @@
                     hideFields: ['create_time','ts']
                 },
                 table: {
-                    actionWidth: 270
+                    actionWidth: 300
                 },
                 insertForm: {
                     disabledFields: ['is_translation','status','comment'],

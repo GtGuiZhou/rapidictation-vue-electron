@@ -2,7 +2,7 @@
     <full-screen>
         <el-container style="width: 100%;height: 100%">
             <el-header class="header between">
-                <router-link to="/admin/welcome" class="title"><i class="el-icon-cold-drink"></i>SuperCrud</router-link>
+                <router-link to="/admin/welcome" class="title"><i class="el-icon-cold-drink"></i>Rapidictation</router-link>
 
                 <div class="toolbar">
                     <!--                    全屏-->
@@ -63,7 +63,7 @@
                     {'icon': 'el-icon-user-solid', 'name': '管理员管理', url: '/admin/admin', sub_menu: []},
                     // {'icon': 'el-icon-user', 'name': '用户管理', url: '/admin/user', sub_menu: []},
                     {'icon': 'el-icon-star-on', 'name': '激活码管理', url: '/admin/active_code', sub_menu: []},
-                    {'icon': 'el-icon-s-opportunity', 'name': '单词管理', url: '/admin/word', sub_menu: []},
+                    // {'icon': 'el-icon-s-opportunity', 'name': '单词管理', url: '/admin/word', sub_menu: []},
                     {'icon': 'el-icon-menu', 'name': '单词分类管理', url: '/admin/word_category', sub_menu: []},
                     {'icon': 'el-icon-back', 'name': '返回', url: '/desktop', sub_menu: []},
                 ]

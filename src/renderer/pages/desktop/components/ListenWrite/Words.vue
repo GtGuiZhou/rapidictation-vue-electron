@@ -1,62 +1,63 @@
 <template>
     <full-parent v-loading="loading" style="overflow-x: hidden;background-color: white">
-        <div class="tool">
-            <el-link type="primary" style="margin-right: 15px;line-height: 28px" @click="submit">提交</el-link>
-            <el-link type="success" style="margin-right: 15px;line-height: 28px" v-if="!isPause" @click="pause">暂停</el-link>
-            <el-link type="success" style="margin-right: 15px;line-height: 28px"  v-else @click="begin">开始</el-link>
-            <el-link type="warning" style="margin-right: 15px;line-height: 28px" @click="reset">重置</el-link>
+        <div class="tool between">
+            <div>
+                <el-link type="success" style="margin-right: 15px;line-height: 28px" v-if="!isPause" @click="pause">暂停
+                </el-link>
+                <el-link type="success" style="margin-right: 15px;line-height: 28px" v-else @click="begin">开始</el-link>
+                <el-link type="warning" style="margin-right: 15px;line-height: 28px" @click="reset">重听</el-link>
+                <el-link type="primary" style="margin-right: 15px;line-height: 28px" @click="submit">报告</el-link>
+            </div>
+            <div style="margin-right: 20px">
+                <el-link type="info" style="margin-right: 15px;line-height: 28px" @click="visualSetting = true">设置
+                </el-link>
+                <el-switch
+                        :value="speechType === 'us'"
+                        @change="v => speechType = v?'us':'uk'"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="美音"
+                        inactive-text="英音">
+                </el-switch>
+            </div>
 
-            <el-link style="margin-right: 15px;text-decoration: none" :underline="false">重复播放次数：
-                <el-input-number size="mini" v-model="wordRepeatCount" :min="0" :step="1"></el-input-number>
-            </el-link>
-            <el-link style="margin-right: 15px;text-decoration: none" :underline="false">重复播放延时：
-                <el-input-number size="mini" v-model="playWordDelay" :min="0" :step="1"></el-input-number>
-                毫秒
-            </el-link>
-            <el-link style="margin-right: 15px;text-decoration: none" :underline="false">单词输入延时：
-                <el-input-number size="mini" v-model="inputWordDelay" :min="0" :step="1"></el-input-number>
-                毫秒
-            </el-link>
-            <el-switch
-                    :value="speechType === 'us'"
-                    @change="v => speechType = v?'us':'uk'"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    active-text="美音"
-                    inactive-text="英音">
-            </el-switch>
-            <router-link v-if="mode !== 'WordBook'" to="/desktop/word_book">
-                <el-link type="primary" style="margin-right: 45px;line-height: 28px;float: right">单词本</el-link>
-            </router-link>
+
+            <!--            <router-link v-if="mode !== 'WordBook'" to="/desktop/word_book">-->
+            <!--                <el-link type="primary" style="margin-right: 45px;line-height: 28px;float: right">单词本</el-link>-->
+            <!--            </router-link>-->
         </div>
         <div class="word-area">
-            <div class="word-item " v-for="(word,index) in words" :key="word.id">
-                <div v-if="!isSubmitted" class="word-tip"
-                     :style="{backgroundColor: word.isPlay ? '#67C23A':'#909399'}"></div>
-                <div v-else style="font-weight: bold">
-                    <i v-if="word.status === 'normal'" class="el-icon-remove-outline" style="color: #909399"></i>
-                    <i v-if="word.status === 'correct'" class="el-icon-check" style="color: #67C23A"></i>
-                    <i v-if="word.status === 'error'" class="el-icon-close" style="color: #F56C6C"></i>
-                </div>
+            <template v-for="(word,index) in words">
+                <div class="word-item " :key="word.id"
+                     :style="{borderColor: word.status === 'error'?'#F56C6C':'#909399'}">
+                    <div v-if="!isSubmitted" class="word-tip"
+                         :style="{backgroundColor: word.isPlay ? '#67C23A':'#909399'}"></div>
+                    <div v-else style="font-weight: bold">
+                        <i v-if="word.status === 'normal'" class="el-icon-remove-outline" style="color: #909399"></i>
+                        <i v-if="word.status === 'correct'" class="el-icon-check" style="color: #67C23A"></i>
+                        <i v-if="word.status === 'error'" class="el-icon-close" style="color: #F56C6C"></i>
+                    </div>
 
-                <div>
-                    <el-tag v-if="!isPlay" style="cursor: pointer" @click="play(index)"><i
-                            class="el-icon-video-play"></i></el-tag>
-                    &nbsp;
-                    <el-tag v-if="mode !== 'WordBook'" style="cursor: pointer" @click="addWord(word)"><i
-                            class="el-icon-plus"></i></el-tag>
-                    &nbsp;
-                    <el-tag @click="focusView(word)" style="cursor: pointer"
-                    ><i class="el-icon-view"></i></el-tag>
-                </div>
-                <div>
-                    <input :ref="'input'+ index" v-model="word.inputWord" @keyup.enter="enterWord(index)"
-                           style="width: 150px;height: 30px">
-                    <!--                    <el-input v-model="word.inputWord" style="width: 150px"-->
-                    <!--                              @keyup.enter="enterWord"></el-input>-->
-                </div>
+                    <div>
+                        <span v-if="!isPlay" class="word-action" @click="play(index)">
+                            <i class="iconfont icon-erji"></i>
+                        </span>
+                        &nbsp;
+                        <span v-if="mode !== 'WordBook'" class="word-action" @click="addWord(word)">
+                            <i class="iconfont icon-changshi-"></i>
+                        </span>
+                        &nbsp;
+                        <span @click="focusView(word)" class="word-action">
+                            <i class="iconfont icon-chakan"></i>
+                        </span>
+                    </div>
+                    <div>
+                        <input :ref="'input'+ index" v-model="word.inputWord" @keyup.enter="enterWord(index)"
+                               style="width: 150px;height: 30px;font-weight: bold;font-size: 1.2rem">
+                    </div>
 
-            </div>
+                </div>
+            </template>
 
             <el-dialog
                     :modal-append-to-body='false'
@@ -76,13 +77,17 @@
             <el-dialog
                     :visible.sync="visualSubmit"
                     :modal-append-to-body='false'
-                    width="30%"
+                    width="600px"
                     style="font-weight: bold;"
             >
                 <div slot="title">
-                    听抄报告 - {{category.name}}（<label style="color: #409EFF">{{level.name}}</label>）
+                    听词报告 - {{category.name}}（<label style="color: #409EFF">{{level.name}}</label>）
                 </div>
                 <el-form>
+                    <el-form-item label="听词时间">
+                        <label style="color: #409EFF"> {{curDateTime()}}</label>
+                    </el-form-item>
+
                     <el-form-item label="查询次数">
                         <label style="color: #409EFF"> {{viewCount}}</label>
                     </el-form-item>
@@ -95,24 +100,53 @@
                         <label style="color: #409EFF"> {{errorCount}}</label>
                     </el-form-item>
 
-                    <el-form-item label="本次听抄得分">
-                        <label style="color: #409EFF">{{parseInt((hearCount - errorCount )/ hearCount *
-                            100)}}</label>（<label
+                    <el-form-item label="听词得分">
+                        <label style="color: #409EFF">{{hearCount !== 0?parseInt((hearCount - errorCount )/ hearCount *
+                            100):0}}</label>（<label
                             style="color: #409EFF">100</label>分）
                     </el-form-item>
                 </el-form>
-
-                <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="visualSubmit = false">确 定</el-button>
-            </span>
+                <div style="text-align: center">
+                    <el-button type="primary" @click="visualSubmit = false">确 定</el-button>
+                </div>
             </el-dialog>
 
+            <el-dialog
+                    title="设置播放模式"
+                    :visible.sync="visualSetting"
+                    :modal-append-to-body='false'
+                    width="350px"
+            >
+                <el-form :inline="true">
+                    <el-form-item label="重复播放次数：">
+                        <el-input-number size="mini" v-model="wordRepeatCount" :min="0" :step="1"></el-input-number>
+                        次
+                    </el-form-item>
+                    <el-form-item label="重复播放次数：">
+                        <el-input-number size="mini" :value="playWordDelay / 1000"
+                                         @change="v => playWordDelay = v * 1000"
+                                         :min="0"
+                                         :step="1"></el-input-number>
+                        秒
+                    </el-form-item>
+                    <el-form-item label="重复播放次数：">
+                        <el-input-number size="mini" :value="inputWordDelay / 1000"
+                                         @change="v => inputWordDelay = v * 1000"
+                                         :min="0"
+                                         :step="1"></el-input-number>
+                        秒
+                    </el-form-item>
+                </el-form>
+                <div style="text-align: center">
+                    <el-button type="primary" @click="visualSetting = false">确 定</el-button>
+                </div>
+            </el-dialog>
 
             <el-dialog
                     title="加入单词本"
                     :visible.sync="visualCategory"
                     :modal-append-to-body='false'
-                    width="30%"
+                    width="600px"
                     style="font-weight: bold;"
             >
                 <el-table
@@ -146,8 +180,11 @@
                         <el-input style="max-width: 300px;display: inline-block" v-model="inputCategory"
                                   placeholder="请输入分类名称"
                                   @keypress.enter="enterInputCategory"></el-input>
-                        <el-button plain type="primary" @click="enterInputCategory(inputCategory)">确定</el-button>
-                        <el-button plain type="info" @click="showInputCategory = false">取消</el-button>
+
+                        <div style="text-align: center;margin-top: 10px">
+                            <el-button plain type="primary" @click="enterInputCategory(inputCategory)">确定</el-button>
+                            <el-button plain type="info" @click="showInputCategory = false">取消</el-button>
+                        </div>
                     </div>
                     <el-link @click="showInputCategory = true" v-else type="primary" :underline="false">
                         <h1>
@@ -165,7 +202,9 @@
 <script>
     import FullParent from "../../../../components/FullParent";
     import word_store from "../../mixin/word_store";
+    import moment from 'moment'
 
+    let resetTimer
     // 定时循环播放定时
     let playTimer = null
 
@@ -176,7 +215,7 @@
         props: {
             importWords: {
                 type: Array,
-                default: () =>[]
+                default: () => []
             },
             mode: {
                 type: String,
@@ -196,6 +235,7 @@
         ],
         data() {
             return {
+                visualSetting: false,
                 showInputCategory: false,
                 inputCategory: '',
                 localWords: [],
@@ -210,8 +250,8 @@
                 isPlay: false,
                 playWord: null,
                 showWord: null,
-                playWordDelay: 1500,
-                inputWordDelay: 3000,
+                playWordDelay: 0,
+                inputWordDelay: 0,
                 playWordIndex: 0,
                 wordRepeatCount: 3,
                 viewCount: 0,
@@ -219,13 +259,14 @@
                 errorCount: 0,
                 isSubmitted: false,
                 speechType: 'us',
-                isPause: false
+                isPause: true,
+                resetLock: false
             }
         },
         watch: {
             localWords: {
                 handler(val) {
-                    if (this.mode === 'ListenWrite'){
+                    if (this.mode === 'ListenWrite') {
                         localStorage.setItem('localWords', JSON.stringify(val))
                     }
                 },
@@ -246,7 +287,7 @@
                 )
             }
 
-            if(this.mode === 'WordBook'){
+            if (this.mode === 'WordBook') {
                 this.words = this.importWords
                 this.loading = false
                 this.reset()
@@ -255,19 +296,21 @@
 
         },
         methods: {
-            pause(){
-                if (this.isPlay){
-                    this.isPause = true
-                    clearInterval(playTimer)
-                    clearTimeout(repeatPlayTimer)
-                }
+            curDateTime(){
+              return moment().format('YYYY-MM-DD HH:mm:ss')
             },
 
-            begin(){
-                if (this.isPlay){
-                    this.isPause = false
-                    this.play(this.playWordIndex,false)
+            pause() {
+                this.isPause = true
+            },
+
+            begin() {
+                if (this.isPlay) {
+                    this.$notify.warning('请先等待上一次播放结束在开启播放')
+                    return
                 }
+                this.isPause = false
+                this.play(this.playWordIndex, false)
             },
 
             addCategory(word) {
@@ -302,28 +345,30 @@
                 if (word.showWord === true) {
                     this.viewCount++
                     this.visualWordDescription = true
-                    if (!(word.ts_info instanceof Object)){
-                        this.visualTsInfo = JSON.parse(word.ts_info)
+                    let info = word.ts_info
+                    if (!(word.ts_info instanceof Object)) {
+                        info = JSON.parse(word.ts_info)
                     }
+                    this.visualTsInfo = info
                 }
             },
 
             submit() {
-                clearInterval(playTimer)
-                clearTimeout(repeatPlayTimer)
                 if (!this.isSubmitted) {
                     this.checkErrorWord()
                 }
                 this.isSubmitted = true
                 this.visualSubmit = true
-                this.isPlay = false
+                this.pause()
             },
 
-            reset(){
-                clearInterval(playTimer)
-                clearTimeout(repeatPlayTimer)
+            reset() {
+                this.pause()
+                this.resetListenWriteData()
+            },
+
+            resetListenWriteData(){
                 this.isSubmitted = false
-                this.isPlay = false
                 this.words = this.words.map(word => {
                     word.status = 'normal'
                     word.inputWord = ''
@@ -339,7 +384,7 @@
             checkErrorWord() {
                 this.words.forEach(word => {
                     if (word.isPlay) {
-                        if (word.inputWord !== word.word) {
+                        if (word.inputWord.replace(/(^\s*)|(\s*$)/g, "") !== word.word.replace(/(^\s*)|(\s*$)/g, "")) {
                             this.errorCount++
                             word.status = 'error'
                         } else {
@@ -349,18 +394,19 @@
                 })
             },
 
-            play(index,isReset = true) {
+            async play(index, isReset = true) {
+                this.isPause = false
                 this.$refs['input' + index][0].focus()
-                if (isReset){
-                    this.reset()
+                if (isReset) {
+                    this.resetListenWriteData()
                 }
                 this.isPlay = true
                 this.playWordIndex = index
-
-                let queueFunc = () => {
-                    if (this.playWordIndex >= this.words.length) {
-                        this.submit()
-                        return;
+                // 听写单词列表
+                for (; this.playWordIndex < this.words.length; this.playWordIndex++) {
+                    if (this.isPause) {
+                        this.isPlay = false
+                        return
                     }
                     // 获取播放单词
                     let word = this.words[this.playWordIndex]
@@ -368,36 +414,52 @@
                     // 记录听词播放数量
                     this.hearCount++
                     // 重复播放该单词
-                    let playCount = 0
-                    let playFunc = () => {
-                        let mp3 = null
+                    for (let i = 0; i < this.wordRepeatCount; i++) {
+                        if (this.isPause) {
+                            this.isPlay = false
+                            return
+                        }
                         if (this.speechType === 'us') {
-                            mp3 = new Audio(word.us_audio)
+                            await this.playAudio(word.us_audio)
                         } else {
-                            mp3 = new Audio(word.uk_audio)
+                            await this.playAudio(word.uk_audio)
                         }
-                        mp3.play()
-                        playCount++
-                        if (playCount < this.wordRepeatCount) {
-                            repeatPlayTimer = setTimeout(playFunc, this.playWordDelay)
-                        }
+                        await this.sleep(this.playWordDelay)
                     }
-                    setTimeout(playFunc, this.playWordDelay)
-                    // 切换到下一单词
-                    this.playWordIndex++
+                    await this.sleep(this.inputWordDelay)
                 }
+                this.submit()
+                this.isPlay = false
+            },
 
-                queueFunc()
-                playTimer = setInterval(queueFunc, this.inputWordDelay + this.playWordDelay * this.wordRepeatCount)
+            playAudio(url) {
+                return new Promise(resolve => {
+                    let audio = new Audio(url)
+                    audio.play()
+                    audio.onended = () => resolve()
+                })
+            },
+
+            sleep(ms) {
+                return new Promise(resolve => {
+                    setTimeout(() => resolve(), ms)
+                })
             }
         }
     }
 </script>
 
 <style scoped>
+
+    .word-action i {
+        cursor: pointer;
+        color: #409EFF;
+        font-weight: bold;
+        font-size: 22px
+    }
+
+
     .tool {
-        overflow-x: auto;
-        min-width: 1324px;
         position: absolute;
         left: 0;
         top: 0;

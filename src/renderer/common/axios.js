@@ -1,12 +1,13 @@
 import axios from 'axios'
 
-// const urlParams = 'XDEBUG_SESSION_START=13708'
+// const urlParams = 'XDEBUG_SESSION_START=11705'
 const urlParams = ''
 
 
 // 创建一个 axios 实例
 const service = axios.create({
-    baseURL: 'http://rap.luyuanling.com',
+    baseURL: 'http://rap.raptrans.cn:7777',
+    // baseURL: 'http://127.0.0.15',
     timeout: 5000 // 请求超时时间
 })
 
