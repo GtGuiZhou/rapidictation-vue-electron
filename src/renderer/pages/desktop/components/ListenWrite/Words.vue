@@ -53,7 +53,7 @@
                     </div>
                     <div>
                         <input :ref="'input'+ index" v-model="word.inputWord" @keyup.enter="enterWord(index)"
-                               style="width: 150px;height: 30px;font-weight: bold;font-size: 1.2rem">
+                               style="width: 150px;height: 20px;font-weight: bold;border-radius: 2px;border: 1px solid   black">
                     </div>
 
                 </div>
@@ -450,14 +450,12 @@
 </script>
 
 <style scoped>
-
     .word-action i {
         cursor: pointer;
         color: #409EFF;
         font-weight: bold;
-        font-size: 22px
+        font-size: 16px
     }
-
 
     .tool {
         position: absolute;
@@ -484,19 +482,19 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 350px;
-        height: 50px;
+        width: 300px;
+        height: 40px;
         padding: 10px;
         margin: 10px;
         border-radius: 5px;
         box-sizing: border-box;
-        border: 2px dashed #e6e6e6;
+        border: 1px dashed #e6e6e6;
     }
 
     .word-tip {
-        width: 20px;
-        height: 20px;
-        border-radius: 25px;
+        width: 16px;
+        height: 16px;
+        border-radius: 20px;
     }
 
     .word-text {

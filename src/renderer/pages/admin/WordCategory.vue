@@ -1,7 +1,10 @@
 <template>
     <div>
-        <crud-index  :where-plus="{pid: 0}" :order-plus="{rank: 'desc'}" :base-url="baseUrl" :relations="relations"  ref="crud" :insert-form="insertForm" :edit-form="editForm"
-                    :filter="filter" :table="table" :fields="fields">
+        <crud-index  :where-plus="{pid: 0}" :order-plus="{rank: 'desc'}"
+                     :base-url="baseUrl"
+                     :relations="relations"  ref="crud"
+                     :insert-form="insertForm" :edit-form="editForm"
+                     :filter="filter" :table="table" :fields="fields">
             <template  #table-action-left="scope">
                 <el-button plain type="success" size="mini" @click="addChildren(scope.row)" v-if="scope.row.pid == '0'">添加等级</el-button>
                 <el-button plain type="primary" size="mini" @click="wordManager(scope.row)" v-if="scope.row.pid != '0'">单词管理</el-button>

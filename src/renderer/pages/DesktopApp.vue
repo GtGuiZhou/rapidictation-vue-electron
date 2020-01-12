@@ -10,7 +10,6 @@
                 :visible.sync="loggingActive"
                 width="700px"
         >
-
                 <div style="text-align: center">
                     <img src="../assets/logo.png" />
                     <h3>学好英语，从听懂单词开始！</h3>
