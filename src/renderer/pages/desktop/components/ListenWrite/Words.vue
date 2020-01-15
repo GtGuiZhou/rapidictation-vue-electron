@@ -117,23 +117,25 @@
                     :modal-append-to-body='false'
                     width="350px"
             >
-                <el-form :inline="true">
-                    <el-form-item label="重复播放次数：">
+                <el-form :inline="true" >
+                    <el-form-item label="单词重复播放次数：">
                         <el-input-number size="mini" v-model="wordRepeatCount" :min="0" :step="1"></el-input-number>
                         次
                     </el-form-item>
-                    <el-form-item label="重复播放次数：">
+                    <el-form-item label="重复单词播放间隔：">
                         <el-input-number size="mini" :value="playWordDelay / 1000"
                                          @change="v => playWordDelay = v * 1000"
                                          :min="0"
-                                         :step="1"></el-input-number>
+                                         :step="500">
+                        </el-input-number>
                         秒
                     </el-form-item>
-                    <el-form-item label="重复播放次数：">
+                    <el-form-item label="相邻单词播放间隔：">
                         <el-input-number size="mini" :value="inputWordDelay / 1000"
                                          @change="v => inputWordDelay = v * 1000"
                                          :min="0"
-                                         :step="1"></el-input-number>
+                                         :step="500">
+                        </el-input-number>
                         秒
                     </el-form-item>
                 </el-form>
@@ -250,10 +252,10 @@
                 isPlay: false,
                 playWord: null,
                 showWord: null,
-                playWordDelay: 0,
-                inputWordDelay: 0,
+                playWordDelay: 1000,
+                inputWordDelay: 1000,
                 playWordIndex: 0,
-                wordRepeatCount: 3,
+                wordRepeatCount: 2,
                 viewCount: 0,
                 hearCount: 0,
                 errorCount: 0,
@@ -262,6 +264,9 @@
                 isPause: true,
                 resetLock: false
             }
+        },
+        beforeDestroy() {
+            this.pause()
         },
         watch: {
             localWords: {
