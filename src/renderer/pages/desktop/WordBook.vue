@@ -87,7 +87,7 @@
                                 </el-input>
                                 <el-button class="button-new-tag" size="small" @click="onInsertWord">添加</el-button>
                             </div>
-                            <div>
+                            <div style="margin-left: 10px">
                                 <el-switch
                                         :value="speechType === 'us'"
                                         @change="v => speechType = v?'us':'uk'"
@@ -113,7 +113,7 @@
                                     style="width: 100%;height: 400px;overflow-y: auto">
                                 <el-table-column
                                         type="selection"
-                                        width="55">
+                                        width="30">
                                 </el-table-column>
                                 <el-table-column label="发音" width="50">
                                     <template slot-scope="scope">
@@ -122,15 +122,19 @@
                                            @click="playWord(scope.row)"></i>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="单词" prop="word"></el-table-column>
+                                <el-table-column width="200" label="单词" prop="word"></el-table-column>
                                 <el-table-column label="词义">
                                     <template slot-scope="scope">
                                         {{ scope.row.ts_info.basic ?scope.row.ts_info.basic.explains[0]:''}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="查看" width="50">
+                                <el-table-column label="操作" width="120">
                                     <template slot-scope="scope">
                                         <el-link type="primary" @click="selectWord = scope.row">查看</el-link>
+                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
+                                        <el-link type="danger" @click="deleteIndexWord(scope.$index)">删除</el-link>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -166,7 +170,7 @@
             <el-dialog :close-on-click-modal="false" :modal="false" :visible.sync="visualListenWrite" title="单词听写"
                        width="80%" style="overflow-x: hidden">
                 <div style="height: 300px;">
-                    <words :category="selectCategory" :level="{name: '单词本'}" mode="WordBook"
+                    <words v-if="visualListenWrite" :category="selectCategory" :level="{name: '单词本'}" mode="WordBook"
                            :import-words="selectWords"></words>
                 </div>
             </el-dialog>
@@ -199,6 +203,10 @@
             }
         },
         methods: {
+            deleteIndexWord(index){
+              this.selectCategory.words.splice(index,1)
+            },
+
             selectWordsChange(val) {
                 window.console.log(val)
                 this.selectWords = val
@@ -287,13 +295,14 @@
 
 <style scoped>
     .word-list {
-        min-width: 670px;
+        /*min-width: 670px;*/
+        width: 75%;
         border: 1px solid #e6e6e6;
     }
 
     .word-description {
         padding: 0 10px;
-        width: 260px;
+        width: 25%;
         border-top: 1px solid #e6e6e6;
         border-bottom: 1px solid #e6e6e6;
         border-right: 1px solid #e6e6e6;
@@ -314,6 +323,7 @@
     .word-list-header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .category {

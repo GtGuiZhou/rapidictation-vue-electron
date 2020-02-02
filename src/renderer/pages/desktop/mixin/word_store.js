@@ -56,7 +56,7 @@ export default {
                 return
             }
 
-            this.selectCategory.words.push(word)
+            this.selectCategory.words.unshift(word)
         },
 
         deleteCategory(index) {

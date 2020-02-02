@@ -11,6 +11,16 @@
             <div style="margin-right: 20px">
                 <el-link type="info" style="margin-right: 15px;line-height: 28px" @click="visualSetting = true">设置
                 </el-link>
+
+                <el-switch
+                        :value="writeType === 'english'"
+                        @change="v => writeType = v?'english':'chinese'"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="英文"
+                        inactive-text="中文">
+                </el-switch>
+
                 <el-switch
                         :value="speechType === 'us'"
                         @change="v => speechType = v?'us':'uk'"
@@ -19,6 +29,7 @@
                         active-text="美音"
                         inactive-text="英音">
                 </el-switch>
+
             </div>
 
 
@@ -53,7 +64,7 @@
                     </div>
                     <div>
                         <input :ref="'input'+ index" v-model="word.inputWord" @keyup.enter="enterWord(index)"
-                               style="width: 150px;height: 20px;font-weight: bold;border-radius: 2px;border: 1px solid   black">
+                               style="width: 150px;height: 20px;font-weight: bold;border-radius: 2px;border: 1px solid #409EFF">
                     </div>
 
                 </div>
@@ -126,7 +137,7 @@
                         <el-input-number size="mini" :value="playWordDelay / 1000"
                                          @change="v => playWordDelay = v * 1000"
                                          :min="0"
-                                         :step="500">
+                                         :step="0.1">
                         </el-input-number>
                         秒
                     </el-form-item>
@@ -134,7 +145,7 @@
                         <el-input-number size="mini" :value="inputWordDelay / 1000"
                                          @change="v => inputWordDelay = v * 1000"
                                          :min="0"
-                                         :step="500">
+                                         :step="0.1">
                         </el-input-number>
                         秒
                     </el-form-item>
@@ -237,6 +248,7 @@
         ],
         data() {
             return {
+                writeType: 'english',
                 visualSetting: false,
                 showInputCategory: false,
                 inputCategory: '',
@@ -262,6 +274,7 @@
                 isSubmitted: false,
                 speechType: 'us',
                 isPause: true,
+                isEnded: false,
                 resetLock: false
             }
         },
@@ -315,7 +328,7 @@
                     return
                 }
                 this.isPause = false
-                this.play(this.playWordIndex, false)
+                this.play(this.playWordIndex, this.isEnded)
             },
 
             addCategory(word) {
@@ -364,6 +377,7 @@
                 }
                 this.isSubmitted = true
                 this.visualSubmit = true
+                this.isEnded = true
                 this.pause()
             },
 
@@ -384,29 +398,46 @@
                 this.viewCount = 0
                 this.hearCount = 0
                 this.errorCount = 0
+                this.playWordIndex = 0
             },
 
             checkErrorWord() {
                 this.words.forEach(word => {
                     if (word.isPlay) {
-                        if (word.inputWord.replace(/(^\s*)|(\s*$)/g, "") !== word.word.replace(/(^\s*)|(\s*$)/g, "")) {
-                            this.errorCount++
-                            word.status = 'error'
-                        } else {
-                            word.status = 'correct'
+                        if(this.writeType === 'english'){
+                            if (word.inputWord.trim() !== word.word.trim()) {
+                                this.errorCount++
+                                word.status = 'error'
+                            } else {
+                                word.status = 'correct'
+                            }
+                        }
+
+                        if(this.writeType === 'chinese'){
+                            let ts = word.ts_info instanceof Object?word.ts_info:JSON.parse(word.ts_info)
+                            let answer = ts.basic.explains.join(',')
+                            window.console.log(answer,word.inputWord.trim())
+                            window.console.log(answer.indexOf(word.inputWord.trim()))
+                            if (answer.indexOf(word.inputWord.trim()) < 0 || word.inputWord.trim().length < 1) {
+                                this.errorCount++
+                                word.status = 'error'
+                            } else {
+                                word.status = 'correct'
+                            }
                         }
                     }
                 })
             },
 
             async play(index, isReset = true) {
+                this.isEnded = false
                 this.isPause = false
                 this.$refs['input' + index][0].focus()
+                this.isPlay = true
+                this.playWordIndex = index
                 if (isReset) {
                     this.resetListenWriteData()
                 }
-                this.isPlay = true
-                this.playWordIndex = index
                 // 听写单词列表
                 for (; this.playWordIndex < this.words.length; this.playWordIndex++) {
                     if (this.isPause) {

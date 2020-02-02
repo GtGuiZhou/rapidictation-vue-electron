@@ -47,7 +47,7 @@
         },
         created(){
             window.addEventListener('keydown',  e => {
-                window.console.log(e)
+                // window.console.log(e)
                 if (e.key === 'F3'){
                     this.$router.push('/admin')
                 }
