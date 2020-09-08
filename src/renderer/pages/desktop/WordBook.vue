@@ -3,7 +3,7 @@
         <el-header class="header" style="height: 40px">
             <div style="float: left;line-height: 40px;font-size: 16px;font-weight: bold;cursor: pointer" @click="$router.push('/desktop/welcome')"><i class="el-icon-back"></i>返回主页</div>
             <div style="line-height: 40px;font-size: 16px;font-weight: bold">学好英语，从听懂单词开始！</div>
-            <div style="position:absolute;right:10px;top:0;z-index: 9999;line-height: 40px;font-size: 20px;font-weight: bold;cursor: pointer" @click="visualNewCategory = true">
+            <div style="position:absolute;right:10px;top:0;z-index: 9999;line-height: 40px;font-size: 16px;font-weight: bold;cursor: pointer" @click="visualNewCategory = true">
                 新增分类<i class="el-icon-plus"></i>
             </div>
         </el-header>
@@ -27,7 +27,6 @@
                     >
                     </el-table-column>
                     <el-table-column
-                            width="200"
                             label="单词数量"
                     >
                         <template slot-scope="scope">
@@ -69,7 +68,7 @@
             </el-dialog>
 
 
-            <el-dialog width="80%" :close-on-click-modal="false" :modal="false" :visible.sync="visualWordManager"
+            <el-dialog width="95%" :close-on-click-modal="false" :modal="false" :visible.sync="visualWordManager"
                        title="单词管理">
                 <div style="display: flex">
                     <div class="word-list">
@@ -168,7 +167,7 @@
             </el-dialog>
 
             <el-dialog :close-on-click-modal="false" :modal="false" :visible.sync="visualListenWrite" title="单词听写"
-                       width="80%" style="overflow-x: hidden">
+                       width="95%" style="overflow-x: hidden">
                 <div style="height: 300px;">
                     <words v-if="visualListenWrite" :category="selectCategory" :level="{name: '单词本'}" mode="WordBook"
                            :import-words="selectWords"></words>
